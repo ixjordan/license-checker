@@ -14,12 +14,14 @@ def parse_requirements_file(filepath):
                     continue
                 # Ignore lines that are not package specifications
                 if "==" in line:
-                    try: 
                         package, version = line.split("==")
-                        # add package and version to tuple
-                        libraries.append((package.strip(), version.strip()))
-                    except ValueError:
-                        print(f"Error parsing line: {line}")
+
+                elif ">=" in line:
+                        package, version = line.split(">=")
+                else:
+                    continue
+                # add package and version to tuple
+                libraries.append((package.strip(), version.strip()))
                 
     except FileNotFoundError:
         print(f"File not found: {filepath}")
@@ -28,9 +30,10 @@ def parse_requirements_file(filepath):
     
     # return libraries list of tuples
     return libraries
-    
-    
-print(parse_requirements_file("requirements.txt"))
+
+
+if __name__ == "__main__":
+    print(parse_requirements_file("/Users/jordancroft/Documents/Documents - Jordan.’s MacBook Air/GitHub/license-checker/requirements.txt"))
 
 
 
