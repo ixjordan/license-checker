@@ -1,6 +1,14 @@
+import os
 import requests
+from dotenv import load_dotenv
 
-API_KEY = "434df902ecdedd73db413f1896d1df12"
+load_dotenv()
+
+
+API_KEY = os.getenv("libraries.io-API_KEY")
+if not API_KEY:
+    raise ValueError(f"Libraries.io API key not found {API_KEY}")
+
 
 def fetch_license(package_name):
     """
@@ -15,6 +23,7 @@ def fetch_license(package_name):
     url = f"https://libraries.io/api/pypi/{package_name}?api_key={API_KEY}"
 
     try:
+        # get request using specified url
         response = requests.get(url)
         response.raise_for_status()
         data = response.json()
