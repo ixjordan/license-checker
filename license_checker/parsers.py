@@ -1,3 +1,6 @@
+import json
+
+
 def parse_requirements_file(filepath):
     """
     Will parse a requirements.txt file and return a list of (package, version) tuples
@@ -29,6 +32,36 @@ def parse_requirements_file(filepath):
         print(f"Error reading file: {filepath}, Error: {e}")
     
     # return libraries list of tuples
+    return libraries
+
+def parse_package_json(filepath):
+    """
+    Parses a package.json file and returns a list of (package, version) tuples
+    """
+
+    libraries = []
+
+    try:
+        with open(filepath) as f:
+            data = json.load(f)
+
+
+            dependencies = data.get("dependencies", {})
+            dev_dependencies = data.get("devDependencies", {})
+            print(type(dependencies))
+
+
+
+            try:
+                for key, value in dependencies.items():
+                    libraries.append((key, value))
+            except Exception as e:
+                print("Can not find key value pair")
+
+
+    except FileNotFoundError:
+        print("Error parsing json")
+
     return libraries
 
 

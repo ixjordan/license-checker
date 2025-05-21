@@ -6,15 +6,25 @@ from . import license_fetcher
 
 def search_license(filepath):
     # create empty dictionary to hold results
+    libraries =[]
     results = {}
-    # assign the parsed file to variable of libraries (will be a list of tuples)
-    libraries = parsers.parse_requirements_file(filepath)
-    print(libraries)
+    if filepath.endswith(".txt"):
+        # assign the parsed file to variable of libraries (will be a list of tuples)
+        libraries = parsers.parse_requirements_file(filepath)
+        package_type = "pypi"
+        print(libraries)
+    elif filepath.endswith(".json"):
+        libraries = parsers.parse_package_json(filepath)
+        print(libraries)
+        package_type = "npm"
+    else:
+        print("Sorry, unsupported file type ")
+        return {}
 
     # cycle through each tuple and find license for package
     for library in libraries:
         package = library[0]
-        lic = license_fetcher.fetch_license(package)
+        lic = license_fetcher.fetch_license(package, package_type)
 
         if lic == "":
             results[package] = "License not found"
